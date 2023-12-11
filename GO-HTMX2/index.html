@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@1.4.0/dist/htmx.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>ToDo List</h1>
+        <form hx-post="/todos" hx-target="#todo-list" hx-swap="outerHTML">
+            <input type="text" name="task" class="form-control" placeholder="Add new task">
+            <button type="submit" class="btn btn-primary mt-2">Add</button>
+        </form>
+        <div id="todo-list" hx-get="/todos" hx-trigger="load">
+            <!-- ToDo items will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        function deleteTodo(id) {
+            fetch(`/delete?id=${id}`, { method: 'GET' })
+                .then(response => {
+                    if (response.ok) {
+                        var item = document.getElementById('todo-item-' + id);
+                        if (item) {
+                            item.remove();
+                        }
+                    } else {
+                        console.error('Failed to delete item');
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
+

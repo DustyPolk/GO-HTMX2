@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Part of ToDo Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <ul class="list-group mt-3">
+        {{ range . }}
+        <li class="list-group-item d-flex justify-content-between align-items-center" id="todo-item-{{ .ID }}">
+            {{ .Task }}
+            <a href="javascript:void(0);" onclick="deleteTodo({{ .ID }})">Delete</a>
+        </li>
+        {{ end }}
+    </ul>
+
+    <script>
+        function deleteTodo(id) {
+            fetch(`/delete?id=${id}`, { method: 'GET' })
+                .then(response => {
+                    if (response.ok) {
+                        var item = document.getElementById('todo-item-' + id);
+                        if (item) {
+                            item.remove();
+                        }
+                    } else {
+                        console.error('Failed to delete item');
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
+
